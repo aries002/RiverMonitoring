@@ -6,16 +6,20 @@ import argparse
 import imutils
 from collections import deque
 
-
+y1 = 5
+y2 = 600
+x1 = 0
+x2 = 43
+video_link = 'rtsp://admin:24april1997@192.168.24.237:554/cam/realmonitor?channel=1&subtype=1'
 # cap = cv2.VideoCapture(0)
-cap = cv2.VideoCapture('rtsp://admin:24april1997@192.168.24.237:554/cam/realmonitor?channel=1&subtype=1')
+cap = cv2.VideoCapture(video_link)
 # rtsp://admin:24april1997@192.168.24.237:554/cam/realmonitor?channel=1&subtype=1
 # cap = cv2.imread("contoh1.jpg", cv2.IMREAD_COLOR)
 
 while( cap.isOpened() ) :
 	ret,img = cap.read()
 	rest,img1 = cap.read()
-	img = img[5:600, 0:43] # FRAME YANG DIPOTONG [TINGGI ATAS:TINGGI BAWAH, LEBAR KANAN, KIRI]
+	img = img[y1:y2, x1:x2] # FRAME YANG DIPOTONG [TINGGI ATAS:TINGGI BAWAH, LEBAR KANAN, KIRI]
 	gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 	blur = cv2.GaussianBlur(gray,(5,5),0)
 	ret,thresh1 = cv2.threshold(blur,70,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
