@@ -6,11 +6,13 @@ import argparse
 import imutils
 from collections import deque
 
-y1 = 5
-y2 = 600
-x1 = 0
-x2 = 43
-video_link = 'rtsp://admin:24april1997@192.168.24.237:554/cam/realmonitor?channel=1&subtype=1'
+
+# 1280 x 720 
+y1 = 150
+y2 = 400
+x1 = 160
+x2 = 200
+video_link = 2
 # cap = cv2.VideoCapture(0)
 cap = cv2.VideoCapture(video_link)
 # rtsp://admin:24april1997@192.168.24.237:554/cam/realmonitor?channel=1&subtype=1
