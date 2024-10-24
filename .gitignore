@@ -2,3 +2,5 @@
 !.gitignore
 contoh/
 *tes*
+config.json
+__pycache__
