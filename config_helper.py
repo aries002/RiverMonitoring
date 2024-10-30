@@ -31,4 +31,7 @@ class config_helper:
                 print(config, "=", self._config[section][config],'(',type(self._config[section][config]),')')
         # print(self._config.sections())
     
+    def get_config(self):
+        pass
+    
     

@@ -164,6 +164,5 @@ class water_level:
 				k = cv2.waitKey(10)
 				if k == 27:
 					break
-				time.sleep(1)
 			print("Restarting in 3 seconds")
 			time.sleep(3)
