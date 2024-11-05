@@ -9,7 +9,7 @@ DEF_TEMPLATE = './config_template.conf'
 URI_CONFIG = ''
 URI_SENSOR = ''
 URI_TIMELAPSE = ''
-
+URI_STATUS = ''
 
 class system:
     def __init__(self, config_location = ''):
@@ -22,6 +22,7 @@ class system:
         self._config = configparser.ConfigParser()
         self._config.read(config_location)
     
+    # buat file konfigurasi
     def create_conf(self):
         new_config = configparser.ConfigParser()
         if not os.path.isfile(DEF_TEMPLATE):
@@ -32,6 +33,7 @@ class system:
                 new_config.write(configfile)
                 configfile.close()
 
+    # print konfigurasi
     def print_config(self):
         #  data in self.data:?
         for section in self._config.sections():
@@ -40,9 +42,12 @@ class system:
                 print(config, "=", self._config[section][config],'(',type(self._config[section][config]),')')
         # print(self._config.sections())
     
+    # ambil data konfigurasi dari server
     def get_config(self):
         pass
-    
+
+    # masih proses!
+    # kirim image thumbnail
     def send_image(self,img_url):
         url = self._config['server']['url']+URI_TIMELAPSE
         dev_id = self._config['server']['dev_id']
@@ -63,7 +68,8 @@ class system:
         else:
             return False
 
-
+    # masih proses!
+    # kirim data sensor
     def send_sensor(self, json_value):
         url = self._config['server']['url']+URI_SENSOR
         dev_id = self._config['server']['dev_id']
@@ -73,7 +79,13 @@ class system:
         body = json_value
         
         pass
-
+    
+    # masih proses
+    # ambil status dan perintah dari server
     def get_status(self):
+        url = self._config['server']['url']+URI_STATUS
+        dev_id = self._config['server']['dev_id']
+        key = self._config['server']['key']
+
         pass
     
