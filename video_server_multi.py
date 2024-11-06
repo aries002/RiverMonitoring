@@ -44,7 +44,7 @@ class device_addr:
         print("Dev addr loaded")
         pass
 
-    def insert_mysql(self,dev_addr):
+    def check_address(self,dev_addr):
         # mysql_cursor = mysql_server.cursor(buffered=True)
         # mysql_cursor.execute("SELECT * FROM `dev_addr` WHERE `dev_addr` LIKE %s",(dev_addr,))
         # row_count = mysql_cursor.rowcount
@@ -52,7 +52,7 @@ class device_addr:
         # sts = True
         for id, addr in self.dev_addr:
             if addr == dev_addr:
-                return False
+                return True
         # if(row_count == 0):
         sql = "INSERT INTO dev_addr (dev_addr) VALUES (%s)"
         val = (dev_addr,)
@@ -79,11 +79,12 @@ def video_stream():
         # ambil data
         msg,client_addr = server_socket.recvfrom(BUFF_SIZE)
         address = client_addr[0]
-        dev_addr.insert_mysql(address)
+        status = dev_addr.check_address(address)
         # print(type(msg))
         # decoded = base64.b64decode(msg)
         # data = np.fromstring(decoded,dtype=np.uint8)
-        store.set(address,msg)
+        if status:
+            store.set(address,msg)
         # print("frame from ",address)
         # time.sleep(1)
 
