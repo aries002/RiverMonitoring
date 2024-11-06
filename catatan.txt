@@ -1,2 +1,8 @@
 sumber kode:
 https://github.com/heyseppy/liquid-level-detection
+
+
+save image on redis
+https://gist.github.com/gachiemchiep/52f3255a81c907461c2c7ced6ede367a
+https://stackoverflow.com/questions/59173000/sharing-opencv-image-between-c-and-python-using-redis
+

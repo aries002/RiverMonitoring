@@ -10,40 +10,30 @@ import os
 BUFF_SIZE = 65536
 host_ip = '127.0.0.1'
 port = 8000
+socket_address = (host_ip,port)
 
-host = socket.gethostname()
+# memulai server
 server_socket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 server_socket.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF,BUFF_SIZE)
-# server_socket = socket.socket()
-# server_socket.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF,BUFF_SIZE)
-socket_address = (host_ip,port)
 server_socket.bind(socket_address)
 print('Listening at :',socket_address)
-# server_socket.listen()
+
 def video_stream():
-    cv2.namedWindow('RECEIVING VIDEO')
-    cv2.moveWindow('RECEIVING VIDEO', 10,360) 
-
-    # conn, address = server_socket.accept()
-    while True:
+    while (True):
+        # ambil data
         msg,client_addr = server_socket.recvfrom(BUFF_SIZE)
-        print('GOT connection from ',client_addr)
-        while (True):
-            
-            # msg = conn.recv(BUFF_SIZE).decode()
-            data = base64.b64decode(msg,'/')
-            
-            npdata = np.fromstring(data,dtype=np.uint8)
-
-            frame = cv2.imdecode(npdata,1)
-            cv2.imshow("RECEIVING VIDEO", frame)
-            key = cv2.waitKey(1) & 0xFF
-            if key == ord('q'):
-                print('quit')
-                os._exit(1)
-                break
+        # dekode pesan yang didapat
+        data = base64.b64decode(msg)
+        # konversikan data yang sudah didekode
+        npdata = np.fromstring(data,dtype=np.uint8)
+        # dekode data menjadi gambar
+        frame = cv2.imdecode(npdata,1)
+        # tampikan gambar untuk debug
+        cv2.imshow("RECEIVING VIDEO", frame)
+        if cv2.waitKey(1) == ord('q'):
+            break
              
-
+# video_stream()
 from concurrent.futures import ThreadPoolExecutor
-with ThreadPoolExecutor(max_workers=1) as executor:
+with ThreadPoolExecutor(max_workers=2) as executor:
 	executor.submit(video_stream)
