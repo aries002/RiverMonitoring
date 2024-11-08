@@ -1,15 +1,11 @@
 import os
 import configparser
-import cv2
-import requests
+
+
 
 DEF_LOCATION = ""
 DEF_TEMPLATE = './config_template.conf'
 
-URI_CONFIG = ''
-URI_SENSOR = ''
-URI_TIMELAPSE = ''
-URI_STATUS = ''
 
 class system:
     def __init__(self, config_location = ''):
@@ -45,47 +41,3 @@ class system:
     # ambil data konfigurasi dari server
     def get_config(self):
         pass
-
-    # masih proses!
-    # kirim image thumbnail
-    def send_image(self,img_url):
-        url = self._config['server']['url']+URI_TIMELAPSE
-        dev_id = self._config['server']['dev_id']
-        key = self._config['server']['key']
-        
-        # get image
-        vid = cv2.VideoCapture(img_url)
-        result, image = vid.read()
-
-        # prepare data
-        data = {'dev_id' : dev_id, 'key' : key}
-        files = {'timelapse' : image}
-
-        # send data
-        response = requests.post(url, files = files, data = data)
-        if(response.status_code == 200):
-            return True
-        else:
-            return False
-
-    # masih proses!
-    # kirim data sensor
-    def send_sensor(self, json_value):
-        url = self._config['server']['url']+URI_SENSOR
-        dev_id = self._config['server']['dev_id']
-        key = self._config['server']['key']
-
-        # prepare data
-        body = json_value
-        
-        pass
-    
-    # masih proses
-    # ambil status dan perintah dari server
-    def get_status(self):
-        url = self._config['server']['url']+URI_STATUS
-        dev_id = self._config['server']['dev_id']
-        key = self._config['server']['key']
-
-        pass
-    

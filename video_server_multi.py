@@ -11,7 +11,7 @@ import mysql.connector
 
 
 BUFF_SIZE = 65536
-host_ip = '127.0.0.1'
+host_ip = '0.0.0.0'
 port = 8000
 socket_address = (host_ip,port)
 client_addr = []
@@ -45,11 +45,6 @@ class device_addr:
         pass
 
     def check_address(self,dev_addr):
-        # mysql_cursor = mysql_server.cursor(buffered=True)
-        # mysql_cursor.execute("SELECT * FROM `dev_addr` WHERE `dev_addr` LIKE %s",(dev_addr,))
-        # row_count = mysql_cursor.rowcount
-        # mysql_cursor.close()
-        # sts = True
         for id, addr in self.dev_addr:
             if addr == dev_addr:
                 return True
@@ -63,30 +58,23 @@ class device_addr:
         insert_cursor.close()
         self.load_dev_addr()
         return True
-        # else:
-        #     # print(dev_addr)
-        #     return False
+
 
 dev_addr = device_addr('localhost','app','password','vid')
 # memulai server
-server_socket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-server_socket.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF,BUFF_SIZE)
-server_socket.bind(socket_address)
-print('Listening at :',socket_address)
 
 def video_stream():
+    server_socket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+    server_socket.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF,BUFF_SIZE)
+    server_socket.bind(socket_address)
+    print('Listening at :',socket_address)
     while (True):
         # ambil data
         msg,client_addr = server_socket.recvfrom(BUFF_SIZE)
         address = client_addr[0]
         status = dev_addr.check_address(address)
-        # print(type(msg))
-        # decoded = base64.b64decode(msg)
-        # data = np.fromstring(decoded,dtype=np.uint8)
         if status:
             store.set(address,msg)
-        # print("frame from ",address)
-        # time.sleep(1)
 
 
 def show_video():
@@ -97,10 +85,8 @@ def show_video():
     while True:
         for (id,addr) in result :
             data = store.get(addr)
-            # print(addr)
-            # print(data)
             if data :
-                print("valid frame from ",addr)
+                # print("valid frame from ",addr)
                 decoded = base64.b64decode(data)
                 npdata = np.frombuffer(decoded, dtype=np.uint8)
                 frame = cv2.imdecode(npdata,1)
@@ -108,22 +94,9 @@ def show_video():
                 cv2.imshow(title, frame)
                 if cv2.waitKey(1) == ord('q'):
                     break
-            else:
-                print("No frame data from ",addr)
-            # # decoded = np.frombuffer(msg, np.uint8)
-            # # dekode pesan yang didapat
-            # decoded = base64.b64decode(data)
-            # # konversikan data yang sudah didekode
-            # npdata = np.fromstring(decoded,dtype=np.uint8)
-            # # dekode data menjadi gambar
-            # frame = cv2.imdecode(npdata,1)
-            # # frame =  cv2.imdecode(data, 1)
-            # # tampikan gambar untuk debug
-            # title = "Video from "+addr
-            # cv2.imshow("RECEIVING VIDEO", frame)
-            # if cv2.waitKey(1) == ord('q'):
-            #     break
-            # time.sleep(0.5)
+            # else:
+                # print("No frame data from ",addr)
+
              
 # video_stream()
 # from concurrent.futures import ThreadPoolExecutor
