@@ -2,7 +2,6 @@ import os
 import configparser
 
 
-
 DEF_LOCATION = ""
 DEF_TEMPLATE = './config_template.conf'
 

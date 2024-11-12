@@ -15,7 +15,8 @@ if __name__ == '__main__':
     sensor1_lebar_kiri = int(config['sensor1']['sensor1_lebar_kiri'])
     sensor1_lebar_kanan = int(config['sensor1']['sensor1_lebar_kanan'])
     sensor1 = water_level_detector.water_level(videolink, sensor1_tinggi_atas, sensor1_tinggi_bawah,sensor1_lebar_kiri,sensor1_lebar_kanan) # penggil sensor
-    streamer = video_sender.video_sender(config['sensor1']['videolink'],config['video_server']['address'],config['video_server']['stream_port'])
+    stream_port = int(config['video_server']['port'])
+    streamer = video_sender.video_sender(config['sensor1']['videolink'],config['video_server']['address'],stream_port)
     
     # sensor1.thread.start() # mulai sensor
     print("Starting services")

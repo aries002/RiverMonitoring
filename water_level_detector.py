@@ -23,7 +23,7 @@ class water_level:
 		self.result = 0
 
 	def start(self):
-		self.thread = threading.Thread(target = self.image_look )
+		self.thread = threading.Thread(target = self.image_sensor )
 		self.thread.daemon = True
 		self.thread.start()
 
