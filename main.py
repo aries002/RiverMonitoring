@@ -1,10 +1,11 @@
 import time
 import water_level_detector
 import system
+import argparse
 
 # Load config
-sys = system.config('./config.conf')
-config = sys._config
+sistem = system.config('./config.conf')
+config = sistem._config
 
 def sensor_setup(sensor):
     sensor_camrea = config[sensor]['camera']
@@ -30,6 +31,10 @@ def system_setup():
     
 
 if __name__ == '__main__':
+    argumen_parser = argparse.ArgumentParser()
+    argumen_parser.add_argument('-d','--debug',help="Activate debugger for development")
+    argumen = argumen_parser.parse_args()
+    
     # sensor setup
     sensor1 = sensor_setup('sensor1')
     # video stream setup
@@ -46,6 +51,8 @@ if __name__ == '__main__':
     streamer.start()
     while True:
         print("tinggi permukaan =",sensor1.result)
+        # if(input()) == 'q':
+        #     break
         time.sleep(2)
 # sensor1 = water_level_detector.water_level(videolink, sensor1_tinggi_atas, sensor1_tinggi_bawah,sensor1_lebar_kiri,sensor1_lebar_kanan)
 # sensor1.image_look()
