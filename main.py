@@ -6,7 +6,7 @@ import argparse
 # Load config
 sistem = system.config('./config.conf')
 config = sistem._config
-
+api =
 def sensor_setup(sensor):
     sensor_camrea = config[sensor]['camera']
     camera_link = config[sensor_camrea]['link']
@@ -20,8 +20,10 @@ def sensor_setup(sensor):
 
 def system_loop():
     # ambil data sensor
+    # ambil rata rata nilai sensor dalam 1 menit
     # ambil data yang paling sering keluar dalam satu periode loop
     # kirimkan data sensor
+
     # ambil status dan perintah
     # jalankan perintah
     pass
@@ -49,8 +51,10 @@ if __name__ == '__main__':
 
     # stream video to server
     streamer.start()
+    # main process
     while True:
         print("tinggi permukaan =",sensor1.result)
+        system_loop()
         # if(input()) == 'q':
         #     break
         time.sleep(2)

@@ -54,7 +54,7 @@ class api_client:
         self.url = url
         self.uri = {
             'image' : '',
-            'status' : '',
+            'status' : 'status',
             'sensor_data' : '',
             'recent_image' : ''
         }

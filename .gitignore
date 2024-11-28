@@ -3,4 +3,5 @@
 contoh/
 *tes*
 *.conf
+config.php
 __pycache__
