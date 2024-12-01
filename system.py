@@ -134,6 +134,7 @@ class video_sender:
                     # rubah frame gambar menjadi base64
                     message = base64.b64encode(buffer)
                     # kirim frame gambar
+                    
                     self.socket.sendto(message,self.server)
                     # untuk debug
                     if self.debug:
