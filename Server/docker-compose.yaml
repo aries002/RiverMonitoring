@@ -10,8 +10,8 @@ services:
     volumes:
       - ./data/mysql_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
-    ports:
-      - "13306:3306"
+    # ports:
+    #   - "13306:3306"
     networks:
       - net
 
@@ -25,10 +25,10 @@ services:
       PMA_HOST: database
       MYSQL_ROOT_PASSWORD: password
     ports:
-      - "8080:80"
+      - "8081:80"
     networks:
       - net
-      
+
   redis:
     image: redis:latest
     restart: always
@@ -57,7 +57,16 @@ services:
     networks:
       - net
 
-  # dashboard:
+  dashboard:
+    build:
+      context: ./dashboard
+    restart: always
+    volumes:
+      - ./dashboard:/var/www/html
+    networks:
+      - net
+    ports:
+      - 8080:80
 
 networks:
   net:
