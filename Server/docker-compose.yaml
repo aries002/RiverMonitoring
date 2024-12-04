@@ -10,8 +10,12 @@ services:
     volumes:
       - ./data/mysql_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
-    # ports:
-    #   - "3306:3306"
+    ports:
+      - "13306:3306"
+    networks:
+      - net
+
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     restart: always
@@ -22,6 +26,8 @@ services:
       MYSQL_ROOT_PASSWORD: password
     ports:
       - "8080:80"
+    networks:
+
   redis:
     image: redis:latest
     restart: always
@@ -34,13 +40,23 @@ services:
       # - REDIS_PASSWORD=my-password
       - REDIS_PORT=6379
       # - REDIS_DATABASES=16
+    networks:
+      - net
 
   video_server:
+    restart: always
     build:
       context: ./
     ports:
-      -8000:8000/udp
+      - 8000:8000/udp
+      - 8008:8008/tcp
     depends_on:
       - database
       - redis
+    networks:
+      - net
+
   # dashboard:
+
+networks:
+  net:

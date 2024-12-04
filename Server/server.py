@@ -17,13 +17,13 @@ class server:
     def __init__(self,listen_addresses="0.0.0.0",listen_port = 8000,api_port=8008):
         self.no_image = var.no_img
         self.api_port = api_port
-        self.redis_host = 'localhost'
+        self.redis_host = 'redis'
         self.redis_port = 6379
         self.redis_server = redis.Redis(host=self.redis_host, port=self.redis_port, decode_responses=True)
         self.BUFF_SIZE = 655360
         self.socket_address = (listen_addresses,listen_port)
         self.debug = False
-        self.mysql_host = 'localhost'
+        self.mysql_host = 'database'
         self.mysql_user = 'app'
         self.mysql_pass = 'password'
         self.mysql_db = 'water_level'
@@ -31,8 +31,10 @@ class server:
             host=self.mysql_host,
             user=self.mysql_user,
             password=self.mysql_pass,
-            database=self.mysql_db
+            database=self.mysql_db,
+            
         )
+        
         self.load_dev_addr()
         pass
 
