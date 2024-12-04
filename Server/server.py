@@ -11,6 +11,8 @@ from hashlib import sha256
 import var
 import sys, getopt
 
+DEBUG = False
+
 class server:
     def __init__(self,listen_addresses="0.0.0.0",listen_port = 8000,api_port=8008):
         self.no_image = var.no_img
@@ -175,3 +177,6 @@ if __name__ == '__main__':
     except getopt.error as err:
         print(str(err))
         sys.exit()
+    
+    server_.start()
+    app.run(debug=DEBUG,port=8008,host='0.0.0.0')

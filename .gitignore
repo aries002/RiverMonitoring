@@ -5,3 +5,4 @@ contoh/
 *.conf
 config.php
 __pycache__
+data/

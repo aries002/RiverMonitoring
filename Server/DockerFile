@@ -1,4 +1,7 @@
-FROM Ubuntu:latest
-RUN  mkdir /home/server/
-WORKDIR /home/server/
-COPY ./ /home/server/
+FROM python:3
+WORKDIR /app
+COPY . /app
+RUN pip install --no-cache-dir -r req.txt
+EXPOSE 8080
+EXPOSE 8000
+CMD [ "python", "server.py" ]
