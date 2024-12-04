@@ -1,0 +1,4 @@
+FROM Ubuntu:latest
+RUN  mkdir /home/server/
+WORKDIR /home/server/
+COPY ./ /home/server/

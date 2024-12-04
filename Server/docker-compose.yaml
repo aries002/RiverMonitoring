@@ -1,0 +1,6 @@
+services:
+  database:
+    image: 
+  redis:
+  video_server:
+  dashboard:

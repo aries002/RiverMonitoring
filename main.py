@@ -36,22 +36,28 @@ if __name__ == '__main__':
                 FILE_KONFIGURASI = currentValue
                 print("Menggunakan file konfigurasi di "+FILE_KONFIGURASI)
             elif currentArgument in ("-d", "--debug"):
+                print("DEBUG ACTIVATED!")
                 DEBUG = True
     except getopt.error as err:
         print(str(err))
         sys.exit()
+
+
     # Load config
     sistem = system.config(FILE_KONFIGURASI)
+    sistem.debug = DEBUG
     config = sistem._config
     api = system.api_client(config['general']['server_address'])
-    
+    api.debug = DEBUG
     # sensor setup
     sensor1 = sensor_setup('sensor1')
     sensor1.debug = DEBUG
+
     # video stream setup
     stream_port = int(config['video_server']['port'])
     stream_camera = config['video_server']['camera']
     streamer = system.video_sender(config[stream_camera]['link'],config['video_server']['address'],stream_port)
+    streamer.token = config['general']['token']
     streamer.debug = DEBUG
     
     # sensor1.thread.start() # mulai sensor
@@ -65,7 +71,7 @@ if __name__ == '__main__':
     detik = 0
     tampung_sensor = []
     while True:
-        # print("tinggi permukaan =",sensor1.result)
+        # kirim data yang sudah dinormalisasi!
         # ambil data sensor dan kumpulkan selama 1 menit
         if detik < 60:
             tampung_sensor[detik] = sensor1.result # ambil data setiap detik
@@ -76,6 +82,7 @@ if __name__ == '__main__':
             payload['water_sensor'] = mode(tampung_sensor) # ambil data yang paling sering muncul untuk menghilangkan gangguan
             json_payload = json.dumps(payload) # persiapkan data dalam json
             api.send_sensor(json_payload) # kirimkan data
+            
             if DEBUG :
                 print("Sensor Data:")
                 print(tampung_sensor)
@@ -91,5 +98,12 @@ if __name__ == '__main__':
         elif perintah == "restart_system"+config["general"]["dev_id"]:
             print("System rebooting in short time")
             time.sleep(3)
-        
+
+        # kirimkan data realtime
+        data_real = {
+            "sensor1" :sensor1.result
+        }
+        data_json = json.dumps(data_real)
+        streamer.send_data(data_json)
+        # delay 1 detik
         time.sleep(1)

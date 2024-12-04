@@ -1,7 +1,8 @@
 import os
 import configparser
 import requests
-import cv2, imutils, socket
+import cv2, imutils
+import socket
 import numpy as np
 import base64
 import threading
@@ -20,6 +21,7 @@ class config:
             self.create_conf()
         self._config = configparser.ConfigParser()
         self._config.read(config_location)
+        self.debug = False
     
     # buat file konfigurasi
     def create(self):
@@ -45,9 +47,6 @@ class config:
                 print(config, "=", self._config[section][config],'(',type(self._config[section][config]),')')
         # print(self._config.sections())
     
-    # download data konfigurasi dari server
-    def download(self):
-        pass
 
 class api_client:
     def __init__(self,url):
@@ -59,6 +58,7 @@ class api_client:
             'recent_image' : ''
         }
         self.header ={}
+        self.debug = False
         pass
 
     def get_status(self):
@@ -105,20 +105,30 @@ class video_sender:
     def __init__(self,video_id,server_ip,server_port):
         self.debug = False
         self.video_res = (640,480)
-        self.buffer_size = 65536
+        self.buffer_size = 655360
         self.video_id = video_id
         self.server = (server_ip,server_port)
         self.socket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         self.socket.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF,self.buffer_size)
         self.daemon = True
         self.run = True
+        self.token = ""
         pass
     
+    def set_token(self, token):
+        self.token = token
+
     def start(self):
         self.thread = threading.Thread(target=self.video_stream)
         self.thread.daemon = self.daemon
         self.thread.run()
 
+    def send_data(self,data="", data_type = b'2'):
+        message = base64.b64encode(data.encode('utf-8'))
+        token = bytes(self.token,'utf-8')
+        message = data_type+token+message
+        self.socket.sendto(message, self.server)
+        
     def video_stream(self):
         while True:
             if self.run:
@@ -134,7 +144,9 @@ class video_sender:
                     # rubah frame gambar menjadi base64
                     message = base64.b64encode(buffer)
                     # kirim frame gambar
-                    
+                    token = bytes(self.token, 'utf-8')
+                    message = b'1'+token+message
+
                     self.socket.sendto(message,self.server)
                     # untuk debug
                     if self.debug:

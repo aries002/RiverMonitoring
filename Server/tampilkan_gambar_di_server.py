@@ -27,7 +27,10 @@ def show_video():
                 npdata = np.frombuffer(decoded, dtype=np.uint8)
                 frame = cv2.imdecode(npdata,1)
                 title = "IMAGE FROM "+nama
+                print("Data dari "+nama+" =")
+                print(store.get(id+"_data"))
+
                 cv2.imshow(title, frame)
-                if cv2.waitKey(0) == ord('q'):
+                if cv2.waitKey(1) == ord('q'):
                     break
 show_video()
