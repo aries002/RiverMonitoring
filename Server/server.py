@@ -34,7 +34,7 @@ class server:
             database=self.mysql_db,
             
         )
-        
+
         self.load_dev_addr()
         pass
 
@@ -126,6 +126,9 @@ class server:
             return data
         else :
             return ""
+    
+    def add_device(self,dev_id=''):
+        pass
         
 server_ = server()
 
