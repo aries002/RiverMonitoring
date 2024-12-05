@@ -135,7 +135,7 @@ class video_sender:
                     ret, frame = cap.read()
                     # persiapkan video untuk dikirim
                     frame = cv2.resize(frame,self.video_res)
-                    encoded, buffer = cv2.imencode('.jpg',frame,[cv2.IMWRITE_JPEG_QUALITY,80])
+                    encoded, buffer = cv2.imencode('.jpg',frame,[cv2.IMWRITE_JPEG_QUALITY,50])
                     # rubah frame gambar menjadi base64
                     message = base64.b64encode(buffer)
                     # kirim frame gambar
