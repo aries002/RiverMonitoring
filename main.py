@@ -10,7 +10,7 @@ import sys, getopt
 FILE_KONFIGURASI = "./config.conf"
 DEBUG = False
 
-def sensor_setup(sensor):
+def sensor_setup(sensor,config):
     sensor_camrea = config[sensor]['camera']
     camera_link = config[sensor_camrea]['link']
 
@@ -44,20 +44,19 @@ if __name__ == '__main__':
 
 
     # Load config
-    sistem = system.config(FILE_KONFIGURASI)
+    sistem = system.system(FILE_KONFIGURASI)
     sistem.debug = DEBUG
-    config = sistem._config
-    api = system.api_client(config['general']['server_address'])
-    api.debug = DEBUG
+
+
     # sensor setup
-    sensor1 = sensor_setup('sensor1')
+    sensor1 = sensor_setup('sensor1',sistem._config)
     sensor1.debug = DEBUG
 
     # video stream setup
-    stream_port = int(config['video_server']['port'])
-    stream_camera = config['video_server']['camera']
-    streamer = system.video_sender(config[stream_camera]['link'],config['video_server']['address'],stream_port)
-    streamer.token = config['general']['token']
+    stream_port = int(sistem._config['video_server']['port'])
+    stream_camera = sistem._config['video_server']['camera']
+    streamer = system.video_sender(sistem._config[stream_camera]['link'],sistem._config['video_server']['address'],stream_port)
+    streamer.token = sistem._config['general']['token']
     streamer.debug = DEBUG
     
     # sensor1.thread.start() # mulai sensor
@@ -68,36 +67,8 @@ if __name__ == '__main__':
     # stream video to server
     streamer.start()
     # main process
-    detik = 0
-    tampung_sensor = []
     while True:
-        # kirim data yang sudah dinormalisasi!
-        # ambil data sensor dan kumpulkan selama 1 menit
-        if detik < 60:
-            tampung_sensor[detik] = sensor1.result # ambil data setiap detik
-            detik+1
-        else:
-            detik = 0
-            payload = []
-            payload['water_sensor'] = mode(tampung_sensor) # ambil data yang paling sering muncul untuk menghilangkan gangguan
-            json_payload = json.dumps(payload) # persiapkan data dalam json
-            api.send_sensor(json_payload) # kirimkan data
-            
-            if DEBUG :
-                print("Sensor Data:")
-                print(tampung_sensor)
-                print(json_payload)
-            tampung_sensor = []
-        
-        # ambil status dan terapkan perintah
-        perintah = api.get_status()
-        if perintah == "start_video_stream":
-            streamer.run = True
-        elif perintah == "stop_video_stream":
-            streamer.run = False
-        elif perintah == "restart_system"+config["general"]["dev_id"]:
-            print("System rebooting in short time")
-            time.sleep(3)
+
 
         # kirimkan data realtime
         data_real = {

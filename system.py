@@ -11,7 +11,7 @@ DEF_LOCATION = ""
 DEF_TEMPLATE = './config_template.conf'
 
 
-class config:
+class system:
     def __init__(self, config_location = ''):
         self.def_if = 'testing'
         self.config_location =config_location
@@ -68,13 +68,7 @@ class api_client:
         result = requests.get(url, headers=header)
         return result.text
     
-    def send_sensor(self,data):
-        url = self.url+self.uri['sensor_data']
 
-        result = requests.post(url, headers=self.header, json=data)
-        
-        return result
-    
     def send_image(self,base64_img, url = None):
         if url is None:
             url = self.url+self.uri['image']
