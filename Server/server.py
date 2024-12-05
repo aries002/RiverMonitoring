@@ -59,12 +59,12 @@ class server:
     
     def video_stream(self):
         server_socket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-        server_socket.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF,BUFF_SIZE)
+        server_socket.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF,self.BUFF_SIZE)
         server_socket.bind(self.socket_address)
         print('Listening at :',self.socket_address)
         while (True):
             # ambil data
-            msg,client_addr = server_socket.recvfrom(BUFF_SIZE)
+            msg,client_addr = server_socket.recvfrom(self.BUFF_SIZE)
             kode = msg[0:1]
             token = msg[1:65]
             token = token.decode("utf-8")
