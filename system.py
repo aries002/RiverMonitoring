@@ -99,7 +99,7 @@ class video_sender:
     def __init__(self,video_id,server_ip,server_port):
         self.debug = False
         self.video_res = (640,480)
-        self.buffer_size = 65536
+        self.buffer_size = 655360
         self.video_id = video_id
         self.server = (server_ip,server_port)
         self.socket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
