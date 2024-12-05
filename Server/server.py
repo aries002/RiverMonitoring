@@ -20,7 +20,7 @@ class server:
         self.redis_host = 'redis'
         self.redis_port = 6379
         self.redis_server = redis.Redis(host=self.redis_host, port=self.redis_port, decode_responses=True)
-        self.BUFF_SIZE = 65536
+        self.BUFF_SIZE = 655360
         self.socket_address = (listen_addresses,listen_port)
         self.debug = False
         self.mysql_host = 'database'

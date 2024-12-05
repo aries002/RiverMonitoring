@@ -102,8 +102,7 @@ class video_sender:
         self.buffer_size = 65536
         self.video_id = video_id
         self.server = (server_ip,server_port)
-        self.socket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-        self.socket.setsockopt(socket.SOL_SOCKET,socket.SO_SNDBUF,self.buffer_size)
+
         self.daemon = True
         self.run = True
         self.token = ""
@@ -130,18 +129,21 @@ class video_sender:
                 print("Streaming to ",self.server)
                 
                 while cap.isOpened() and self.run:
+                    soket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+                    soket.setsockopt(socket.SOL_SOCKET,socket.SO_SNDBUF,self.buffer_size)
                     # ambil frame
                     ret, frame = cap.read()
                     # persiapkan video untuk dikirim
                     frame = cv2.resize(frame,self.video_res)
-                    encoded, buffer = cv2.imencode('.jpg',frame,[cv2.IMWRITE_JPEG_QUALITY,80])
+                    encoded, buffer = cv2.imencode('.jpg',frame,[cv2.IMWRITE_JPEG_QUALITY,50])
                     # rubah frame gambar menjadi base64
                     message = base64.b64encode(buffer)
                     # kirim frame gambar
                     token = bytes(self.token, 'utf-8')
                     message = b'1'+token+message
-                    
-                    self.socket.sendto(message,self.server)
+                    # print(message)
+                    soket.sendto(message,self.server)
+                    # socket.close()
                     # untuk debug
                     if self.debug:
                         cv2.imshow("Video transmited", frame)
