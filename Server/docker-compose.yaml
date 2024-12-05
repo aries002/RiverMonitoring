@@ -38,9 +38,9 @@ services:
       - ./data/redis_data:/root/redis
       # - ./data/redis.conf:/usr/local/etc/redis/redis.conf
     environment:
-      # - REDIS_PASSWORD=my-password
+      - REDIS_PASSWORD=my-password
       - REDIS_PORT=6379
-      # - REDIS_DATABASES=16
+      - REDIS_DATABASES=16
     networks:
       - net
 
