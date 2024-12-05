@@ -103,7 +103,7 @@ class video_sender:
         self.video_id = video_id
         self.server = (server_ip,server_port)
         self.socket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-        self.socket.setsockopt(socket.SOL_SOCKET,socket.SO_RCVBUF,self.buffer_size)
+        self.socket.setsockopt(socket.SOL_SOCKET,socket.SO_SNDBUF,self.buffer_size)
         self.daemon = True
         self.run = True
         self.token = ""
@@ -140,7 +140,7 @@ class video_sender:
                     # kirim frame gambar
                     token = bytes(self.token, 'utf-8')
                     message = b'1'+token+message
-
+                    
                     self.socket.sendto(message,self.server)
                     # untuk debug
                     if self.debug:
