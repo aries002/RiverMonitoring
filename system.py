@@ -143,7 +143,7 @@ class video_sender:
                     message = b'1'+token+message
                     # print(message)
                     soket.sendto(message,self.server)
-                    socket.close()
+                    # socket.close()
                     # untuk debug
                     if self.debug:
                         cv2.imshow("Video transmited", frame)
