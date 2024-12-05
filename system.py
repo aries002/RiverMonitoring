@@ -117,10 +117,12 @@ class video_sender:
         self.thread.run()
 
     def send_data(self,data="", data_type = b'2'):
+        soket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+        soket.setsockopt(socket.SOL_SOCKET,socket.SO_SNDBUF,self.buffer_size)
         message = base64.b64encode(data.encode('utf-8'))
         token = bytes(self.token,'utf-8')
         message = data_type+token+message
-        self.socket.sendto(message, self.server)
+        soket.sendto(message, self.server)
         
     def video_stream(self):
         while True:
