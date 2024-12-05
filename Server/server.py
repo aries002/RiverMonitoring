@@ -20,7 +20,7 @@ class server:
         self.redis_host = 'redis'
         self.redis_port = 6379
         self.redis_server = redis.Redis(host=self.redis_host, port=self.redis_port, decode_responses=True)
-        self.BUFF_SIZE = 655360
+        self.BUFF_SIZE = 65536
         self.socket_address = (listen_addresses,listen_port)
         self.debug = False
         self.mysql_host = 'database'
@@ -80,11 +80,22 @@ class server:
                     decoded = base64.b64decode(data)
                     address = address+"_data"
                     self.redis_server.set(address,decoded)
-    
+
+    def server_maintance(self):
+        timer = 0;
+        while True:
+            if(timer >= 60):
+                timer = 0;
+                self.load_dev_addr()
+            time.sleep(1)
+        
     def start(self):
         self.thread = threading.Thread(target=self.video_stream)
+        self.maintence_thread = threading.Thread(target=self.server_maintance)
+        self.maintence_thread.daemon =True
         self.thread.daemon = True
-        self.thread.start
+        self.maintence_thread.start()
+        self.thread.start()
     
     def get_option_value(self,option = ''):
         # ambil option dari mysql server
