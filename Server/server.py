@@ -14,6 +14,7 @@ import sys, getopt
 from flask import Response, send_file
 import io
 import logging
+import zlib
 DEBUG = False
 
 class server:
@@ -69,6 +70,7 @@ class server:
             # ambil data
 
             msg,client_addr = server_socket.recvfrom(self.BUFF_SIZE)
+            msg = zlib.decompress(msg)
             try:
                 kode = msg[0:1]
                 token = msg[1:65]

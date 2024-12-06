@@ -7,6 +7,7 @@ import numpy as np
 import base64
 import threading
 import time
+import zlib
 DEF_LOCATION = ""
 DEF_TEMPLATE = './config_template.conf'
 
@@ -123,6 +124,7 @@ class video_sender:
         message = base64.b64encode(data.encode('utf-8'))
         token = bytes(self.token,'utf-8')
         message = data_type+token+message
+        message = zlib.compress(message)
         # print(message)
         soket.sendto(message, self.server)
         
@@ -145,6 +147,7 @@ class video_sender:
                     # kirim frame gambar
                     token = bytes(self.token, 'utf-8')
                     message = b'1'+token+message
+                    message = zlib.compress(message)
                     # print(message)
                     soket.sendto(message,self.server)
                     # socket.close()
