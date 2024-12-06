@@ -1,6 +1,7 @@
 import cv2
 import socket
 import redis
+import numpy as np
 import mysql.connector
 import threading
 import base64
@@ -10,7 +11,9 @@ import time
 from hashlib import sha256
 import var
 import sys, getopt
-from flask import Response
+from flask import Response, send_file
+import io
+import logging
 DEBUG = False
 
 class server:
@@ -64,22 +67,26 @@ class server:
         print('Listening at :',self.socket_address)
         while (True):
             # ambil data
-            msg,client_addr = server_socket.recvfrom(self.BUFF_SIZE)
-            kode = msg[0:1]
-            token = msg[1:65]
-            token = token.decode("utf-8")
-            address = self.check_address(token)
 
-            # status = dev_addr.check_address(address)
-            if address != False:
-                data = msg[65:]
-                # print(img)
-                if(kode == b'1'):
-                    self.redis_server.set(address,data)
-                if(kode == b'2'):
-                    decoded = base64.b64decode(data)
-                    address = address+"_data"
-                    self.redis_server.set(address,decoded)
+            msg,client_addr = server_socket.recvfrom(self.BUFF_SIZE)
+            try:
+                kode = msg[0:1]
+                token = msg[1:65]
+                token = token.decode("utf-8")
+                address = self.check_address(token)
+
+                # status = dev_addr.check_address(address)
+                if address != False:
+                    data = msg[65:]
+                    # print(img)
+                    if(kode == b'1'):
+                        self.redis_server.set(address,data)
+                    if(kode == b'2'):
+                        decoded = base64.b64decode(data)
+                        address = address+"_data"
+                        self.redis_server.set(address,decoded)
+            except TypeError:
+                print("Packet error!")
 
     def server_maintance(self):
         timer = 0;
@@ -145,6 +152,9 @@ server_ = server()
 
 app = flask.Flask(__name__)
 
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -154,7 +164,25 @@ def index():
 def get_image(dev_id=""):
     if dev_id == "":
         return "Bad Request"
-    return server_.get_image(dev_id)
+    data = server_.get_image(dev_id)
+    # decoded = base64.b64decode(data)
+    # npdata = np.frombuffer(decoded, dtype=np.uint8)
+    # frame = cv2.imdecode(npdata,1)
+
+
+    b = base64.b64decode(data.encode('utf-8'))
+    buf = io.BytesIO(b)
+    buf.seek(0)
+    return send_file(buf, mimetype="image/jpg")
+
+
+    # return frame
+
+@app.route('/api/get/image_base64/<string:dev_id>/')
+def get_image64(dev_id=''):
+    if dev_id == "":
+        return ""
+    return server_.get_image(dev_id='')
 
 @app.route('/api/get/data_realtime/<string:def_id>/')
 def get_data_realtime(def_id = ""):

@@ -37,6 +37,7 @@ RUN	docker-php-ext-install mbstring
 RUN	docker-php-ext-install bcmath
 RUN	docker-php-ext-install xml
 RUN	docker-php-ext-install zip
+RUN	docker-php-ext-install intl
 
 #------------------------------------[AKTIFKAN UNTUK DEVELOPMEN]-------------------------------
 RUN	pecl install xdebug && docker-php-ext-enable xdebug
