@@ -67,8 +67,8 @@ if __name__ == '__main__':
     # stream video to server
     streamer.start()
     # main process
+    print("Strating main process")
     while True:
-
 
         # kirimkan data realtime
         data_real = {

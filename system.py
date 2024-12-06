@@ -106,7 +106,7 @@ class video_sender:
         self.daemon = True
         self.run = True
         self.token = ""
-        pass
+        
     
     def set_token(self, token):
         self.token = token
@@ -114,7 +114,8 @@ class video_sender:
     def start(self):
         self.thread = threading.Thread(target=self.video_stream)
         self.thread.daemon = self.daemon
-        self.thread.run()
+        self.thread.start()
+        print("Stream started")
 
     def send_data(self,data="", data_type = b'2'):
         soket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
@@ -122,6 +123,7 @@ class video_sender:
         message = base64.b64encode(data.encode('utf-8'))
         token = bytes(self.token,'utf-8')
         message = data_type+token+message
+        # print(message)
         soket.sendto(message, self.server)
         
     def video_stream(self):
