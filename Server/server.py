@@ -68,27 +68,34 @@ class server:
         print('Listening at :',self.socket_address)
         while (True):
             # ambil data
+            paket_ok = True
 
             msg,client_addr = server_socket.recvfrom(self.BUFF_SIZE)
-            msg = zlib.decompress(msg)
             try:
-                kode = msg[0:1]
-                token = msg[1:65]
-                token = token.decode("utf-8")
-                address = self.check_address(token)
+                msg = zlib.decompress(msg)
+            except Exception:
+                print("Invalid zip packet")
+                paket_ok = False
 
-                # status = dev_addr.check_address(address)
-                if address != False:
-                    data = msg[65:]
-                    # print(img)
-                    if(kode == b'1'):
-                        self.redis_server.set(address,data)
-                    if(kode == b'2'):
-                        decoded = base64.b64decode(data)
-                        address = address+"_data"
-                        self.redis_server.set(address,decoded)
-            except TypeError:
-                print("Packet error!")
+            if paket_ok:
+                try:
+                    kode = msg[0:1]
+                    token = msg[1:65]
+                    token = token.decode("utf-8")
+                    address = self.check_address(token)
+
+                    # status = dev_addr.check_address(address)
+                    if address != False:
+                        data = msg[65:]
+                        # print(img)
+                        if(kode == b'1'):
+                            self.redis_server.set(address,data)
+                        if(kode == b'2'):
+                            decoded = base64.b64decode(data)
+                            address = address+"_data"
+                            self.redis_server.set(address,decoded)
+                except TypeError:
+                    print("Packet error!")
 
     def server_maintance(self):
         timer = 0;

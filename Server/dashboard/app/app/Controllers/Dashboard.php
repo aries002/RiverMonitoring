@@ -14,8 +14,11 @@ class Dashboard extends SecureController
     }
     public function index()
     {
+        $qdev = $this->db->query("SELECT * FROM device");
+
         $data = [
             'title' => "Dashboard",
+            'device' => $qdev->getResult()
         ];
 
         $this->template->display('dashboard', $data);

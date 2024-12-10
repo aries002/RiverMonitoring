@@ -62,6 +62,7 @@ if __name__ == '__main__':
     # sensor1.thread.start() # mulai sensor
     print("Starting services")
     # sensor start
+    sensor1.debug = DEBUG
     sensor1.start()
 
     # stream video to server

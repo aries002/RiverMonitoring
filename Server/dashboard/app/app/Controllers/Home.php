@@ -30,14 +30,6 @@ class Home extends BaseController
                         $_SESSION['username'] = $username;
                         $_SESSION['level'] = 1;
                         return redirect()->to(base_url('dashboard'));
-                    } else {
-                        // cek pegawai
-                        $cek = $this->db->query("SELECT * FROM pegawai WHERE id=? AND password=?", array($username, $_POST['password']));
-                        if ($cek->getNumRows() == 1) {
-                            $_SESSION['username'] = $username;
-                            $_SESSION['level'] = 0;
-                            return redirect()->to(base_url('dashboard'));
-                        }
                     }
                 }
             }
