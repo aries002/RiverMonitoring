@@ -49,6 +49,9 @@
     <main class="form-signin">
         <form method="post" action="">
             <div class="mb-3" style="text-align:center;">
+                <h2 style="font-weight:bold;-webkit-text-stroke: 5px #000000;paint-order:stroke fill;">
+                    <span style="color:red;">Sungai</span> <span style="color:yellow;">Monitoring</span>
+                </h2>
             </div>
             <h1 class="h3 mb-3 fw-normal">Login</h1>
 

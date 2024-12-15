@@ -1,6 +1,6 @@
 <div style="text-align:center;">
-    <h2>
-        River Monitoring
+    <h2 style="font-weight:bold;-webkit-text-stroke: 5px #000000;paint-order:stroke fill;">
+        <span style="color:red;">Sungai</span> <span style="color:yellow;">Monitoring</span>
     </h2>
 </div>
 <?php
@@ -8,7 +8,7 @@ $bmkg_tropodo = file_get_contents("https://api.bmkg.go.id/publik/prakiraan-cuaca
 $area_tropodo = json_decode($bmkg_tropodo);
 $cuaca_tropodo = $area_tropodo->data[0]->cuaca[0];
 // print_r($cuaca_tropodo);
-echo '<h2>Kedung Banteng</h2>
+echo '<h2>KEDUNGBANTENG</h2>
 <div class="table-responsive">
 <table class="table table-bordered">
 <tr>';
@@ -35,7 +35,7 @@ $bmkg_tropodo = file_get_contents("https://api.bmkg.go.id/publik/prakiraan-cuaca
 $area_tropodo = json_decode($bmkg_tropodo);
 $cuaca_tropodo = $area_tropodo->data[0]->cuaca[0];
 // print_r($cuaca_tropodo);
-echo '<h2>Tropodo</h2>
+echo '<h2>TAMBAKSAWAH</h2>
 <div class="table-responsive">
 <table class="table table-bordered">
 <tr>';
