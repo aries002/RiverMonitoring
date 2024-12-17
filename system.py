@@ -8,6 +8,7 @@ import base64
 import threading
 import time
 import zlib
+from water_level_reader.waterline import water_line
 DEF_LOCATION = ""
 DEF_TEMPLATE = './config_template.conf'
 
@@ -23,6 +24,42 @@ class system:
         self._config = configparser.ConfigParser()
         self._config.read(config_location)
         self.debug = False
+    
+    # def start(self):
+    #     sensor1 = self.init_sensor('sensor1')
+    #     self.sensor1_thread = threading.Thread(target=sensor1.sensor_loop)
+    #     self.sensor1_thread.daemon = True
+    #     self.sensor1_thread.start()
+    #     pass
+
+    def init_sensor(self,sensor):
+        if sensor not in self._config:
+            return False
+        sensor_param = self._config[sensor]
+        try:
+            x1 = sensor_param['x1']
+            x1 = int(x1)
+            x2 = sensor_param['x2']
+            x2 = int(x2)
+            y1 = sensor_param['y1']
+            y1 = int(y1)
+            y2 = sensor_param['y2']
+            y2 = int(y2)
+            camera = self._config[sensor_param['camera']]['link']
+
+            sensor_ = water_line(camera,x1,y1,x2,y2)
+        except:
+            print("Sensor parameter error")
+            return False
+        sensor_.debug = self.debug
+        if 'edge_treshold' in sensor_param:
+            sensor_.edge_treshold = sensor_param['edge_treshold']
+        if 'erode_iteration' in sensor_param:
+            sensor_.erode_iteration = sensor_param['erode_iteration']
+        if 'dilatte_iteration' in sensor_param:
+            sensor_.dilatte_iteration = sensor_param['dilatte_iteration']
+        return sensor_
+
     
     # buat file konfigurasi
     def create(self):

@@ -1,25 +1,13 @@
 import time
-import water_level_detector
 import system
 import argparse
 from statistics import mode
 import json
 import sys, getopt
-
+import threading
 
 FILE_KONFIGURASI = "./config.conf"
 DEBUG = False
-
-def sensor_setup(sensor,config):
-    sensor_camrea = config[sensor]['camera']
-    camera_link = config[sensor_camrea]['link']
-
-    tinggi_atas = int(config[sensor]['tinggi_atas'])
-    tinggi_bawah = int(config[sensor]['tinggi_bawah'])
-    lebar_kiri = int(config[sensor]['lebar_kiri'])
-    lebar_kanan = int(config[sensor]['lebar_kanan'])
-
-    return water_level_detector.water_level(camera_link, tinggi_atas,tinggi_bawah,lebar_kiri,lebar_kanan)
 
 if __name__ == '__main__':
     ARGList = sys.argv[1:]
@@ -49,8 +37,10 @@ if __name__ == '__main__':
 
 
     # sensor setup
-    sensor1 = sensor_setup('sensor1',sistem._config)
-    sensor1.debug = DEBUG
+    sensor1 = sistem.init_sensor('sensor1')
+    sensor_thread = threading.Thread(target=sensor1.sensor_loop)
+    sensor_thread.daemon = True
+    sensor_thread.start()
 
     # video stream setup
     stream_port = int(sistem._config['video_server']['port'])
@@ -62,9 +52,7 @@ if __name__ == '__main__':
     # sensor1.thread.start() # mulai sensor
     print("Starting services")
     # sensor start
-    sensor1.debug = DEBUG
-    sensor1.start()
-
+    
     # stream video to server
     streamer.start()
     # main process
