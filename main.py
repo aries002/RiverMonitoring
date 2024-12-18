@@ -69,5 +69,5 @@ if __name__ == '__main__':
         data_json = json.dumps(data_real)
         streamer.send_data(data_json)
         # delay 1 detik
-        print(sensor1.result)
+        # print(sensor1.result)
         time.sleep(1)
