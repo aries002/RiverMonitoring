@@ -41,6 +41,9 @@ if __name__ == '__main__':
     sensor_thread = threading.Thread(target=sensor1.sensor_loop)
     sensor_thread.daemon = True
     sensor_thread.start()
+    sensorimg_thread = threading.Thread(target=sensor1.get_image)
+    sensorimg_thread.daemon = True
+    sensorimg_thread.start()
 
     # video stream setup
     stream_port = int(sistem._config['video_server']['port'])
@@ -66,4 +69,5 @@ if __name__ == '__main__':
         data_json = json.dumps(data_real)
         streamer.send_data(data_json)
         # delay 1 detik
+        print(sensor1.result)
         time.sleep(1)

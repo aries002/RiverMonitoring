@@ -58,6 +58,8 @@ class system:
             sensor_.erode_iteration = sensor_param['erode_iteration']
         if 'dilatte_iteration' in sensor_param:
             sensor_.dilatte_iteration = sensor_param['dilatte_iteration']
+        if 'fps' in sensor_param:
+            sensor_.fps = sensor_param['fps']
         return sensor_
 
     
